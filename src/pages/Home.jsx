@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import HomeBannerBg from "../assets/HomeBannerBg.jpg";
 import logo from "../assets/logo.png";
 import SearchBar from "../components/SearchBar";
-import { fetchCategories, fetchInitialMeals, searchMeals } from "../api/mealApi";
+import { fetchCategories, fetchInitialMeals, searchMeals, fetchMealsByCategory } from "../api/mealApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CategoryFilter from "../components/CategoryFilter";
 import MealCard from "../components/MealCard";
@@ -44,7 +44,38 @@ const Home = () => {
       });
   };
 
-  if (loading) return <LoadingSpinner />;
+  const handleCategorySelect = (categoryName) => {
+    setLoading(true);
+    if (categoryName === null) {
+      // Show all meals
+      fetchInitialMeals()
+        .then((res) => {
+          setMeals(res.data.meals || []);
+        })
+        .catch((err) => {
+          console.log(err);
+          setMeals([]);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      // Fetch meals by category
+      fetchMealsByCategory(categoryName)
+        .then((res) => {
+          setMeals(res.data.meals || []);
+        })
+        .catch((err) => {
+          console.log(err);
+          setMeals([]);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
+
+  if (loading && meals.length === 0) return <LoadingSpinner />;
 
   return (
     <>
@@ -67,11 +98,15 @@ const Home = () => {
 
       <div className="container mx-auto max-w-7xl mb-4">
         <h2 className="text-2xl font-semibold mb-1 px-4">Explore Categories</h2>
-        <CategoryFilter categories={categories} />
+        <CategoryFilter categories={categories} onCategorySelect={handleCategorySelect} />
       </div>
 
       <div className="container mx-auto px-4 max-w-7xl mb-8">
-        {meals.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center py-10">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
+          </div>
+        ) : meals.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {meals.map((meal) => (
               <MealCard key={meal.idMeal} meal={meal} />
