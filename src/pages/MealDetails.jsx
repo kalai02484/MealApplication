@@ -5,12 +5,14 @@ import axios from "axios";
 import { FcPrevious } from "react-icons/fc";
 import { fetchMealById } from "../api/mealApi";
 import LoadingSpinner from "../components/LoadingSpinner";
+import {useFavorites} from "../context/FavoritesContext";
 
-const MealDetails = () => {
+function MealDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [meal, setMeal] = useState(null);
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     fetchMealById(id)
@@ -46,10 +48,12 @@ const MealDetails = () => {
                 {meal.strArea} Cuisine
               </span>
               <button
-                id="addToFavorites"
-                className="bg-amber-500 hover:bg-amber-400 text-white font-semibold  px-3 py-1 rounded-full shadow duration-200 text-xs mb-4"
+                onClick={() => toggleFavorite(id)}
+                className={`font-semibold px-3 py-1 rounded-full shadow duration-200 text-xs mb-4 ${isFavorite(meal.idMeal)
+                    ? "bg-red-500 hover:bg-red-400 text-white"
+                    : "bg-amber-500 hover:bg-amber-400 text-white"}`}
               >
-                Add to Favorites
+                {isFavorite(meal.idMeal) ? "Remove from Favorites" : "Add to Favorites"}
               </button>
             </div>
 
@@ -57,8 +61,7 @@ const MealDetails = () => {
               <img
                 src={meal.strMealThumb}
                 alt={meal.strMeal}
-                className="w-full h-96 object-cover rounded-lg"
-              />
+                className="w-full h-96 object-cover rounded-lg" />
             </div>
           </div>
         </div>
@@ -130,13 +133,13 @@ const MealDetails = () => {
                 <dd className="mt-1">
                   {meal?.strTags
                     ? meal.strTags.split(",").map((tag) => (
-                        <span
-                          key={tag}
-                          className="inline-block mr-1 px-3 py-1 rounded-sm text-xs bg-amber-100 text-amber-700"
-                        >
-                          {tag}
-                        </span>
-                      ))
+                      <span
+                        key={tag}
+                        className="inline-block mr-1 px-3 py-1 rounded-sm text-xs bg-amber-100 text-amber-700"
+                      >
+                        {tag}
+                      </span>
+                    ))
                     : "No Tags"}
                 </dd>
               </div>
@@ -146,6 +149,6 @@ const MealDetails = () => {
       </div>
     </div>
   );
-};
+}
 
 export default MealDetails;

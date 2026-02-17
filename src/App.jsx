@@ -5,18 +5,21 @@ import Error from "./pages/Error";
 import MealDetails from "./pages/MealDetails";
 import Favorites from "./pages/Favorites";
 import TopNavbar from "./components/TopNavbar";
+import { FavoritesProvider } from "./context/FavoritesContext";
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
-        <TopNavbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/meal/:id" element={<MealDetails />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
+        <FavoritesProvider>
+          <TopNavbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/meal/:id" element={<MealDetails />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+        </FavoritesProvider>
       </BrowserRouter>
     </>
   );

@@ -1,14 +1,16 @@
-import React from 'react'
+import React from "react";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useFavorites } from "../context/FavoritesContext";
 
-const MealCard = ({meal}) => {
+const MealCard = ({ meal }) => {
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const favoriteStatus = isFavorite(meal.idMeal);
+
   return (
     <div className="relative flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-      <div
-        className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
-      >
+      <div className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl">
         <img
           className="object-cover w-full"
           src={meal.strMealThumb}
@@ -27,15 +29,17 @@ const MealCard = ({meal}) => {
           >
             View Details
           </Link>
-          <button
-            className="flex items-center justify-center rounded-md border-2 border-gray-400 px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-blue-300 transition-all duration-200 cursor-pointer hover:border-red-400"
-          >
+          <button className="flex items-center justify-center rounded-md border-2 border-gray-400 px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-blue-300 transition-all duration-200 cursor-pointer hover:border-red-400" onClick={(e) => toggleFavorite(meal)}>
+            {favoriteStatus ? (
               <FaHeart className="text-lg text-red-500" />
+            ) : (
+              <FiHeart className="text-lg text-gray-400" />
+            )}
           </button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default MealCard
+export default MealCard;
