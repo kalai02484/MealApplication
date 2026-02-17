@@ -20,10 +20,10 @@ const TopNavbar = () => {
           <NavbarToggle />
         </div>
         <NavbarCollapse>
-          <Link to="/">
+          <Link to="/" className=" mb-3 sm:mb-0">
             <FcHome className="mr-2 text-xl inline align-bottom" /> Home
           </Link>
-          <Link to="favorites">
+          <Link to="favorites" className=" mb-3 sm:mb-0">
             <FcLike className="mr-2 text-xl inline align-bottom" />
             Favorites
           </Link>
