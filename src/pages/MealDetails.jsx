@@ -36,7 +36,7 @@ function MealDetails() {
         <FcPrevious /> Back
       </button>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         {/* LEFT: Images */}
         <div className="lg:sticky top-20 space-y-4">
           <div className="rounded-xl overflow-hidden bg-white p-6 shadow-sm">
@@ -48,7 +48,7 @@ function MealDetails() {
                 {meal.strArea} Cuisine
               </span>
               <button
-                onClick={() => toggleFavorite(id)}
+                onClick={() => toggleFavorite(meal)}
                 className={`font-semibold px-3 py-1 rounded-full shadow duration-200 text-xs mb-4 ${isFavorite(meal.idMeal)
                     ? "bg-red-500 hover:bg-red-400 text-white"
                     : "bg-amber-500 hover:bg-amber-400 text-white"}`}

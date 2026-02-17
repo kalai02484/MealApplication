@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import HomeBannerBg from "../assets/HomeBannerBg.jpg";
 import logo from "../assets/logo.png";
 import SearchBar from "../components/SearchBar";
-import { fetchCategories, fetchInitialMeals } from "../api/mealApi";
+import { fetchCategories, fetchInitialMeals, searchMeals } from "../api/mealApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CategoryFilter from "../components/CategoryFilter";
 import MealCard from "../components/MealCard";
@@ -29,6 +29,21 @@ const Home = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleSearch = (query) => {
+    setLoading(true);
+    searchMeals(query)
+      .then((res) => {
+        setMeals(res.data.meals || []);
+      })
+      .catch((err) => {
+        console.log(err);
+        setMeals([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   if (loading) return <LoadingSpinner />;
 
   return (
@@ -46,7 +61,7 @@ const Home = () => {
         </p>
 
         <div className="max-w-5xl relative">
-          <SearchBar />
+          <SearchBar onSearch={handleSearch} />
         </div>
       </div>
 
