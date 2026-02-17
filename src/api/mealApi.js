@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "www.themealdb.com/api/json/v1/1";
+const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
 
 export const fetchCategories = () => axios.get(`${BASE_URL}/categories.php`);
 
@@ -12,3 +12,5 @@ export const fetchMealById = (id) =>
 
 export const searchMeals = (query) =>
   axios.get(`${BASE_URL}/search.php?s=${query}`);
+
+export const fetchInitialMeals = () => axios.get(`${BASE_URL}/search.php?s=`);

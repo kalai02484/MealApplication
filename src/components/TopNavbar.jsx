@@ -13,10 +13,8 @@ const TopNavbar = () => {
   return (
     <div className="w-full border-b-2 border-amber-500 sticky top-0 bg-white z-50">
       <Navbar fluid rounded className="mx-auto max-w-7xl">
-        <NavbarBrand>
-          <Link to="/">
-            <img src={logo} className="mr-2 sm:mr-3 h-14 sm:h-18" alt="Logo" />
-          </Link>
+        <NavbarBrand href="/">
+          <img src={logo} className="mr-2 sm:mr-3 h-14 sm:h-18" alt="Logo" />
         </NavbarBrand>
         <div className="flex">
           <NavbarToggle />

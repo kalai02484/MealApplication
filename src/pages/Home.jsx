@@ -2,20 +2,31 @@ import React, { useEffect, useState } from "react";
 import HomeBannerBg from "../assets/HomeBannerBg.jpg";
 import logo from "../assets/logo.png";
 import SearchBar from "../components/SearchBar";
-import { fetchCategories } from "../api/mealApi";
+import { fetchCategories, fetchInitialMeals } from "../api/mealApi";
 import LoadingSpinner from "../components/LoadingSpinner";
+import CategoryFilter from "../components/CategoryFilter";
+import MealCard from "../components/MealCard";
 
 const Home = () => {
+  const [meals, setMeals] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCategories()
-      .then((res) => setCategories(res.data.categories))
+    fetchInitialMeals()
+      .then((res) => setMeals(res.data.meals || []))
       .catch((err) => console.log(err))
       .finally(() => {
         setLoading(false);
       });
+
+    fetchCategories()
+      .then(
+        (res) =>
+          console.log(res.data.categories) ||
+          setCategories(res.data.categories),
+      )
+      .catch((err) => console.log(err));
   }, []);
 
   if (loading) return <LoadingSpinner />;
@@ -37,6 +48,25 @@ const Home = () => {
         <div className="max-w-5xl relative">
           <SearchBar />
         </div>
+      </div>
+
+      <div className="container mx-auto max-w-7xl mb-4">
+        <h2 className="text-2xl font-semibold mb-1 px-4">Explore Categories</h2>
+        <CategoryFilter categories={categories} />
+      </div>
+
+      <div className="container mx-auto px-4 max-w-7xl mb-8">
+        {meals.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {meals.map((meal) => (
+              <MealCard key={meal.idMeal} meal={meal} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-gray-600">
+            No meals found. Try searching for something else!
+          </p>
+        )}
       </div>
     </>
   );
