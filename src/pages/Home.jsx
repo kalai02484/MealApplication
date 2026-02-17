@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import HomeBannerBg from "../assets/HomeBannerBg.jpg";
 import logo from "../assets/logo.png";
 import SearchBar from "../components/SearchBar";
+import { fetchCategories } from "../api/mealApi";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Home = () => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCategories()
+      .then((res) => setCategories(res.data.categories))
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <LoadingSpinner />;
+
   return (
     <>
       <div
@@ -19,7 +35,7 @@ const Home = () => {
         </p>
 
         <div className="max-w-5xl relative">
-          <SearchBar/>
+          <SearchBar />
         </div>
       </div>
     </>
